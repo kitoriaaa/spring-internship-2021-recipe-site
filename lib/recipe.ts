@@ -60,7 +60,13 @@ export async function getRecipes(page: number): Promise<Recipe[]> {
   return recipes.recipes as Recipe[];
 }
 
-export async function getRecipeById() {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL as string;
-  const res = await fetch(apiUrl);
+export async function getRecipeById(id: string | string[] | undefined): Promise<Recipe> {
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL as string;
+  const apiUrl = `${apiBaseUrl}?id=${id}`;
+  console.log("getRecipeById apiURL: ", apiUrl);
+  const res = await fetch(apiUrl, {
+    headers: { 'X-Api-Key': process.env.NEXT_PUBLIC_API_KEY as string }
+  });
+  const recipe = await res.json();
+  return recipe.recipes[0];
 }
