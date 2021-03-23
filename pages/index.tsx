@@ -1,13 +1,11 @@
 import React, { FC, useEffect, useState } from "react";
 import { Layout } from "../components/layout";
-import { Recipe, getRecipes } from "../lib/getRecipe";
+import { Recipe, getRecipes } from "../lib/recipe";
 import Link from "next/link";
-import { useRouter } from 'next/router';
 
 const Home: FC = () => {
   const [recipes, setRecipes] = useState<Recipe[] | null>(null);
   const [page, setPage] = useState<number>(1);
-
 
   useEffect(() => {
     (async () => {
@@ -32,12 +30,19 @@ const Home: FC = () => {
         {recipes.map((recipe) => (
           <div className="card alert alert-primary" key={recipe.id}>
             <Link key={recipe.id} href={`recipes/${recipe.id}`}>
-              <div className="row">
-                <div className="col">
-                  {recipe.image_url !== null ? <img className="my-2" src={recipe.image_url} width="185" /> : <div className="my-2">No Image</div>}
-                </div>
-                <div className="col d-flex align-items-center text-left" >
+              <div>
+                <div className="text-center font-weight-bold">
                   {recipe.title}
+                </div>
+                <div className="row">
+                  <div className="col">
+                    {recipe.image_url !== null ? <img className="my-2" src={recipe.image_url} width="185" /> : <div className="my-2">No Image</div>}
+                  </div>
+                  <div className="col d-flex align-items-center text-left" >
+                    <div className="p-2">
+                      {recipe.description}
+                    </div>
+                  </div>
                 </div>
               </div>
             </Link>
