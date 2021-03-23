@@ -35,13 +35,32 @@ export type Recipe = {
   related_recipes: number[];
 };
 
+// GET /recipes response type
+type Response = {
+  // レシピ一覧
+  recipes: Recipe[];
 
-export async function getRecipes(): Promise<Recipe[]> {
-  const apiUrl = "https://internship-recipe-api.ckpd.co/recipes";
+  // ページネーション可能な場合の次、前のページのリンク
+  links: {
+    next?: string;
+    prev?: string;
+  };
+};
+
+
+export async function getRecipes(page: number): Promise<Recipe[]> {
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL as string;
+  const apiUrl = `${apiBaseUrl}?page=${page}`;
   const res = await fetch(apiUrl, {
     headers: { 'X-Api-Key': process.env.NEXT_PUBLIC_API_KEY as string }
   });
   const recipes = await res.json();
+  console.log(apiUrl);
   console.log(recipes);
   return recipes.recipes as Recipe[];
+}
+
+export async function getRecipeById() {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL as string;
+  const res = await fetch(apiUrl);
 }
