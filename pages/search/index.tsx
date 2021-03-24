@@ -9,8 +9,10 @@ export const Search: FC = () => {
   const [res, setRes] = useState<Response | null>(null);
   const [recipes, setRecipes] = useState<Recipe[] | null>(null);
   const [page, setPage] = useState<string | undefined>(undefined);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    setLoading(true);
     (async () => {
       const page = router.query.page;
       const word = router.query.keyword;
@@ -30,17 +32,19 @@ export const Search: FC = () => {
           setRecipes(res.recipes);
       }
     })();
+    setLoading(false);
   }, [router.query.page, router.query.keyword]);
 
 
-  if (res === null) {
+  console.log(loading);
+  if (loading || recipes == null) {
     return (
       <Layout header="Recipe" title="レシピを検索">
         <div className="alert alert-warning text-center font-weight">Now Loading...</div>
       </Layout>
     );
   }
-  if (recipes === null) {
+  if (res === null) {
     return (
       <Layout header="Recipe" title="レシピを検索">
         <div className="alert alert-warning text-center font-weight">Sorry!! Not Found Recipe</div>
@@ -72,7 +76,7 @@ export const Search: FC = () => {
         ))}
         <div className="btn-toolbar">
           {
-            res.links.prev === undefined ? null :
+            res?.links.prev === undefined ? null :
               <div className="btn-group">
                 <Link href={res?.links.prev.split('?')[1] == undefined ? "/search" : '/search?' + res?.links.prev?.split('?')[1]}>
                   <button type="button" className="btn btn-success">Prev</button>

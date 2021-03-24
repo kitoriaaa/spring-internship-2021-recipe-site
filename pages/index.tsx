@@ -9,8 +9,10 @@ const Home: FC = () => {
   const [recipes, setRecipes] = useState<Recipe[] | null>(null);
   const [page, setPage] = useState<string | undefined>(undefined);
   const [res, setRes] = useState<Response | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    setLoading(true);
     (async () => {
       const page = router.query.page;
       setPage(page as string);
@@ -23,6 +25,7 @@ const Home: FC = () => {
       setRes(res);
       if (res !== null)
         setRecipes(res.recipes);
+      setLoading(false);
     })();
   }, [router.query.page]);
 
@@ -30,7 +33,7 @@ const Home: FC = () => {
 
   console.log("link", res?.links.next);
 
-  if (res === null) {
+  if (loading || recipes === null) {
     return (
       <Layout header="Recipe" title="レシピを検索">
         <div className="alert alert-warning text-center font-weight">Now Loading...</div>

@@ -81,6 +81,7 @@ export async function searchRecipes(keyword: string, page: string | null): Promi
     headers: { 'X-Api-Key': process.env.NEXT_PUBLIC_API_KEY as string }
   });
 
+  // console.log(res.json());
   if (res.status === 404) return null;
   const recipes = await res.json();
   return recipes as Response;
