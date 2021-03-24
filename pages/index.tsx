@@ -53,7 +53,7 @@ const Home: FC = () => {
       {recipes.map((recipe, ind) => (
         <div className="card alert alert-warning" key={recipe.id}>
           <Link key={recipe.id} href={`recipes/${recipe.id}`}>
-            <div>
+            <div role="button">
               <div className="text-center font-weight-bold">
                 {recipe.title}
               </div>

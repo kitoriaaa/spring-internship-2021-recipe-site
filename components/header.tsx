@@ -12,7 +12,7 @@ export const Header: FC<Props> = (props) => {
         <div className="row">
           <div className="col-3">
             <Link href="/">
-              <div className="text-white">
+              <div className="text-white" role="button">
                 {props.header}
               </div>
             </Link>
