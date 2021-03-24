@@ -34,3 +34,12 @@ $ npx next dev
 http://localhost:3000/ を開いて `Hello Next!` が表示されていることを確認します。
 
 簡単でしたね。
+
+## 実行
+```
+docker-compose up -d
+docker-compose exec app /bin/bash
+npx next dev
+```
+
+http://localhost:3030/ にアクセス

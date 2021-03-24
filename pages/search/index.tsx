@@ -1,34 +1,47 @@
 import React, { FC, useEffect, useState } from "react";
-import { Layout } from "../components/layout";
-import { Recipe, getRecipes, Response } from "../lib/recipe";
-import Link from "next/link";
 import { useRouter } from "next/router";
+import { Recipe, searchRecipes, Response } from "../../lib/recipe";
+import { Layout } from "../../components/layout";
+import Link from 'next/link';
 
-const Home: FC = () => {
+export const Search: FC = () => {
   const router = useRouter();
+  const [res, setRes] = useState<Response | null>(null);
   const [recipes, setRecipes] = useState<Recipe[] | null>(null);
   const [page, setPage] = useState<string | undefined>(undefined);
-  const [res, setRes] = useState<Response | null>(null);
 
   useEffect(() => {
     (async () => {
       const page = router.query.page;
+      const word = router.query.keyword;
       setPage(page as string);
       let res;
-      if (page !== undefined) {
-        res = await getRecipes(page[0]);
-      } else {
-        res = await getRecipes("1");
+      console.log("page: ", page);
+
+      if (router.query.keyword !== undefined) {
+        if (page !== undefined) {
+          console.log("page isn't undefined");
+          res = await searchRecipes(word as string, page as string);
+        } else {
+          res = await searchRecipes(word as string, null);
+        }
+        setRes(res);
+        if (res !== null)
+          setRecipes(res.recipes);
       }
-      setRes(res);
-      if (res !== null)
-        setRecipes(res.recipes);
     })();
-  }, [router.query.page]);
+  }, [router.query.page, router.query.keyword]);
 
-
-  // console.log(recipes);
+  if (res === null) {
+    return (
+      <Layout header="Recipe" title="レシピを検索">
+        <div className="alert alert-warning text-center font-weight">Sorry!! Not Found Recipe</div>
+      </Layout>
+    );
+  }
   if (recipes === null) return <div>loading...</div>;
+
+  console.log("query:", router.query.keyword);
 
   return (
     <Layout header="Recipe" title="レシピを検索">
@@ -54,36 +67,24 @@ const Home: FC = () => {
             </Link>
           </div>
         ))}
-        {/* <div className="btn-toolbar">
-          {
-            page === 1 ? null :
-              <div className="btn-group">
-                <button type="button" className="btn btn-secondary" onClick={pageDecrement}>Prev</button>
-              </div>
-          }
-          <div className="btn-group ml-auto">
-            <button type="button" className="btn btn-secondary" onClick={pageIncrement}>Next</button>
-          </div>
-        </div> */}
-
         <div className="btn-toolbar">
           {
             page === undefined ? null :
               <div className="btn-group">
-                <Link href={'/?' + res?.links.prev?.split('?')[1]}>
+                <Link href={'/search?' + res?.links.prev?.split('?')[1]}>
                   <button type="button" className="btn btn-success">Prev</button>
                 </Link>
               </div>
           }
           <div className="btn-group ml-auto">
-            <Link href={'/?' + res?.links.next?.split('?')[1]}>
+            <Link href={'/search?' + res?.links.next?.split('?')[1]}>
               <button type="button" className="btn btn-success">Next</button>
             </Link>
           </div>
         </div>
       </>
-    </Layout >
+    </Layout>
   );
 };
 
-export default Home;
+export default Search;
