@@ -7,12 +7,13 @@ import { useRouter } from "next/router";
 const Home: FC = () => {
   const router = useRouter();
   const [recipes, setRecipes] = useState<Recipe[] | null>(null);
-  const [page, setPage] = useState<number>(1);
+  const [page, setPage] = useState<string | undefined>(undefined);
   const [res, setRes] = useState<Response | null>(null);
 
   useEffect(() => {
     (async () => {
       const page = router.query.page;
+      setPage(page as string);
       let res;
       if (page !== undefined) {
         res = await getRecipes(page[0]);
@@ -25,12 +26,6 @@ const Home: FC = () => {
     })();
   }, [router.query.page]);
 
-  const pageIncrement = () => {
-    setPage(page + 1);
-  };
-  const pageDecrement = () => {
-    setPage(page - 1);
-  };
 
   // console.log(recipes);
   if (recipes === null) return <div>loading...</div>;
@@ -72,9 +67,19 @@ const Home: FC = () => {
         </div> */}
 
         <div className="btn-toolbar">
-          <Link href={'/?' + res?.links.next?.split('?')[1]}>
-            <button type="button" className="btn btn-secondary">Next</button>
-          </Link>
+          {
+            page === undefined ? null :
+              <div className="btn-group">
+                <Link href={'/?' + res?.links.prev?.split('?')[1]}>
+                  <button type="button" className="btn btn-success">Prev</button>
+                </Link>
+              </div>
+          }
+          <div className="btn-group ml-auto">
+            <Link href={'/?' + res?.links.next?.split('?')[1]}>
+              <button type="button" className="btn btn-success">Next</button>
+            </Link>
+          </div>
         </div>
       </>
     </Layout >

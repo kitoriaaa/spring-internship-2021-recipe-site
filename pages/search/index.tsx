@@ -8,11 +8,13 @@ export const Search: FC = () => {
   const router = useRouter();
   const [res, setRes] = useState<Response | null>(null);
   const [recipes, setRecipes] = useState<Recipe[] | null>(null);
+  const [page, setPage] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     (async () => {
       const page = router.query.page;
       const word = router.query.keyword;
+      setPage(page as string);
       let res;
       console.log("page: ", page);
 
@@ -57,11 +59,20 @@ export const Search: FC = () => {
             </Link>
           </div>
         ))}
-
-        <div>
-          <Link href={'/search?' + res?.links.next?.split('?')[1]}>
-            <button type="button" className="btn btn-secondary">Next</button>
-          </Link>
+        <div className="btn-toolbar">
+          {
+            page === undefined ? null :
+              <div className="btn-group">
+                <Link href={'/search?' + res?.links.prev?.split('?')[1]}>
+                  <button type="button" className="btn btn-success">Prev</button>
+                </Link>
+              </div>
+          }
+          <div className="btn-group ml-auto">
+            <Link href={'/search?' + res?.links.next?.split('?')[1]}>
+              <button type="button" className="btn btn-success">Next</button>
+            </Link>
+          </div>
         </div>
       </>
     </Layout>

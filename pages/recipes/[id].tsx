@@ -3,9 +3,8 @@ import { useRouter } from 'next/router';
 import { Recipe, getRecipeById } from "../../lib/recipe";
 import { Layout } from "../../components/layout";
 
-type Props = {};
 
-const RecipePage: FC<Props> = (props) => {
+const RecipePage: FC = () => {
   const router = useRouter();
   const [recipe, setRecipe] = useState<Recipe | null>(null);
 
