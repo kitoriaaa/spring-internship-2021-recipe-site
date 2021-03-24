@@ -32,6 +32,7 @@ export const Search: FC = () => {
     })();
   }, [router.query.page, router.query.keyword]);
 
+
   if (res === null) {
     return (
       <Layout header="Recipe" title="レシピを検索">
@@ -69,18 +70,21 @@ export const Search: FC = () => {
         ))}
         <div className="btn-toolbar">
           {
-            page === undefined ? null :
+            res.links.prev === undefined ? null :
               <div className="btn-group">
                 <Link href={'/search?' + res?.links.prev?.split('?')[1]}>
                   <button type="button" className="btn btn-success">Prev</button>
                 </Link>
               </div>
           }
-          <div className="btn-group ml-auto">
-            <Link href={'/search?' + res?.links.next?.split('?')[1]}>
-              <button type="button" className="btn btn-success">Next</button>
-            </Link>
-          </div>
+          {
+            res?.links.next === undefined ? null :
+              <div className="btn-group ml-auto">
+                <Link href={'/?' + res?.links.next?.split('?')[1]}>
+                  <button type="button" className="btn btn-success">Next</button>
+                </Link>
+              </div>
+          }
         </div>
       </>
     </Layout>
