@@ -26,59 +26,61 @@ const Home: FC = () => {
     })();
   }, [router.query.page]);
 
+  console.log("link prev", res?.links.prev);
 
   console.log("link", res?.links.next);
+
   if (res === null) {
+    return (
+      <Layout header="Recipe" title="レシピを検索">
+        <div className="alert alert-warning text-center font-weight">Now Loading...</div>
+      </Layout>
+    );
+  }
+  if (recipes === null) {
     return (
       <Layout header="Recipe" title="レシピを検索">
         <div className="alert alert-warning text-center font-weight">Sorry!! Not Found Recipe</div>
       </Layout>
     );
   }
-  if (recipes === null) return <div>loading...</div>;
 
   return (
     <Layout header="Recipe" title="レシピを検索">
-      <div className="container-sm">
-        {recipes.map((recipe) => (
-          <div className="card alert alert-primary" key={recipe.id}>
-            <Link key={recipe.id} href={`recipes/${recipe.id}`}>
-              <div>
-                <div className="text-center font-weight-bold">
-                  {recipe.title}
-                </div>
-                <div className="row">
-                  <div className="col">
-                    {recipe.image_url !== null ? <img className="my-2" src={recipe.image_url} width="185" /> : <div className="my-2">No Image</div>}
-                  </div>
-                  <div className="col d-flex align-items-center text-left" >
-                    <div className="p-2">
-                      {recipe.description}
-                    </div>
-                  </div>
+      {recipes.map((recipe, ind) => (
+        <div className="card alert alert-warning" key={recipe.id}>
+          <Link key={recipe.id} href={`recipes/${recipe.id}`}>
+            <div>
+              <div className="text-center font-weight-bold">
+                {recipe.title}
+              </div>
+              <div className="card" id="recipe_all">
+                {recipe.image_url !== null ? <img className="bd-placeholder-img card-img-top" width="100%" height="180" src={recipe.image_url} /> : null}
+                <div className="card-body">
+                  <p className="card-text">{recipe.description}</p>
                 </div>
               </div>
-            </Link>
-          </div>
-        ))}
-        <div className="btn-toolbar">
-          {
-            res.links.prev === undefined ? null :
-              <div className="btn-group">
-                <Link href={'/search?' + res?.links.prev?.split('?')[1]}>
-                  <button type="button" className="btn btn-success">Prev</button>
-                </Link>
-              </div>
-          }
-          {
-            res?.links.next === undefined ? null :
-              <div className="btn-group ml-auto">
-                <Link href={'/?' + res?.links.next?.split('?')[1]}>
-                  <button type="button" className="btn btn-success">Next</button>
-                </Link>
-              </div>
-          }
+            </div>
+          </Link>
         </div>
+      ))}
+      <div className="btn-toolbar">
+        {
+          res.links.prev === undefined ? null :
+            <div className="btn-group">
+              <Link href={res?.links.prev.split('?')[1] == undefined ? "/" : '/?' + res?.links.prev?.split('?')[1]}>
+                <button type="button" className="btn btn-success">Prev</button>
+              </Link>
+            </div>
+        }
+        {
+          res?.links.next === undefined ? null :
+            <div className="btn-group ml-auto">
+              <Link href={'/?' + res?.links.next?.split('?')[1]}>
+                <button type="button" className="btn btn-success">Next</button>
+              </Link>
+            </div>
+        }
       </div>
     </Layout >
   );

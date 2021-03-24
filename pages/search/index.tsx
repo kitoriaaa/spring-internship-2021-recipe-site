@@ -36,11 +36,17 @@ export const Search: FC = () => {
   if (res === null) {
     return (
       <Layout header="Recipe" title="レシピを検索">
+        <div className="alert alert-warning text-center font-weight">Now Loading...</div>
+      </Layout>
+    );
+  }
+  if (recipes === null) {
+    return (
+      <Layout header="Recipe" title="レシピを検索">
         <div className="alert alert-warning text-center font-weight">Sorry!! Not Found Recipe</div>
       </Layout>
     );
   }
-  if (recipes === null) return <div>loading...</div>;
 
   console.log("query:", router.query.keyword);
 
@@ -48,20 +54,16 @@ export const Search: FC = () => {
     <Layout header="Recipe" title="レシピを検索">
       <>
         {recipes.map((recipe) => (
-          <div className="card alert alert-primary" key={recipe.id}>
+          <div className="card alert alert-warning" key={recipe.id}>
             <Link key={recipe.id} href={`recipes/${recipe.id}`}>
               <div>
                 <div className="text-center font-weight-bold">
                   {recipe.title}
                 </div>
-                <div className="row">
-                  <div className="col">
-                    {recipe.image_url !== null ? <img className="my-2" src={recipe.image_url} width="185" /> : <div className="my-2">No Image</div>}
-                  </div>
-                  <div className="col d-flex align-items-center text-left" >
-                    <div className="p-2">
-                      {recipe.description}
-                    </div>
+                <div className="card" id="recipe_all">
+                  {recipe.image_url !== null ? <img className="bd-placeholder-img card-img-top" width="100%" height="180" src={recipe.image_url} /> : null}
+                  <div className="card-body">
+                    <p className="card-text">{recipe.description}</p>
                   </div>
                 </div>
               </div>
@@ -72,7 +74,7 @@ export const Search: FC = () => {
           {
             res.links.prev === undefined ? null :
               <div className="btn-group">
-                <Link href={'/search?' + res?.links.prev?.split('?')[1]}>
+                <Link href={res?.links.prev.split('?')[1] == undefined ? "/search" : '/search?' + res?.links.prev?.split('?')[1]}>
                   <button type="button" className="btn btn-success">Prev</button>
                 </Link>
               </div>
@@ -80,7 +82,7 @@ export const Search: FC = () => {
           {
             res?.links.next === undefined ? null :
               <div className="btn-group ml-auto">
-                <Link href={'/?' + res?.links.next?.split('?')[1]}>
+                <Link href={'/search?' + res?.links.next?.split('?')[1]}>
                   <button type="button" className="btn btn-success">Next</button>
                 </Link>
               </div>
