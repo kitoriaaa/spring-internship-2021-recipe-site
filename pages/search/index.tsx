@@ -30,9 +30,17 @@ export const Search: FC = () => {
           setRecipes(res.recipes);
       }
     })();
-  }, [router.query.page]);
+  }, [router.query.page, router.query.keyword]);
 
+  if (res === null) {
+    return (
+      <Layout header="Recipe" title="レシピを検索">
+        <div className="alert alert-warning text-center font-weight">Sorry!! Not Found Recipe</div>
+      </Layout>
+    );
+  }
   if (recipes === null) return <div>loading...</div>;
+
   console.log("query:", router.query.keyword);
 
   return (

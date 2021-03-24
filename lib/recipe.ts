@@ -73,13 +73,15 @@ export async function getRecipeById(id: string | string[] | undefined): Promise<
 }
 
 
-export async function searchRecipes(keyword: string, page: string | null): Promise<Response> {
+export async function searchRecipes(keyword: string, page: string | null): Promise<Response | null> {
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL as string;
   const apiUrl = page !== null ? `${apiBaseUrl}/search?keyword=${keyword}&page=${page}` : `${apiBaseUrl}/search?keyword=${keyword}`;
   console.log("searchRecipe URL", apiUrl);
   const res = await fetch(apiUrl, {
     headers: { 'X-Api-Key': process.env.NEXT_PUBLIC_API_KEY as string }
   });
+
+  if (res.status === 404) return null;
   const recipes = await res.json();
   return recipes as Response;
 }
