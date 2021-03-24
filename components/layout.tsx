@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import Head from "next/head";
 import { Header } from "./header";
 import { Footer } from "./footer";
+import { Form } from "./form";
 
 type Props = {
   title: string,
@@ -22,10 +23,10 @@ export const Layout: FC<Props> = (props) => {
         <h4 className="my-3 text-primary text-center">
           {props.title}
         </h4>
+        <Form />
         {props.children}
       </div>
       <Footer footer="copyright kitoriaaa" />
     </div>
   );
-
 };
