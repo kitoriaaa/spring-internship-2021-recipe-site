@@ -1,18 +1,29 @@
 import React, { FC, useEffect, useState } from "react";
 import { Layout } from "../components/layout";
-import { Recipe, getRecipes } from "../lib/recipe";
+import { Recipe, getRecipes, Response } from "../lib/recipe";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const Home: FC = () => {
+  const router = useRouter();
   const [recipes, setRecipes] = useState<Recipe[] | null>(null);
   const [page, setPage] = useState<number>(1);
+  const [res, setRes] = useState<Response | null>(null);
 
   useEffect(() => {
     (async () => {
-      const recipes = await getRecipes(page);
-      setRecipes(recipes);
+      const page = router.query.page;
+      let res;
+      if (page !== undefined) {
+        res = await getRecipes(page[0]);
+      } else {
+        res = await getRecipes("1");
+      }
+      setRes(res);
+      if (res !== null)
+        setRecipes(res.recipes);
     })();
-  }, [page]);
+  }, [router.query.page]);
 
   const pageIncrement = () => {
     setPage(page + 1);
@@ -48,7 +59,7 @@ const Home: FC = () => {
             </Link>
           </div>
         ))}
-        <div className="btn-toolbar">
+        {/* <div className="btn-toolbar">
           {
             page === 1 ? null :
               <div className="btn-group">
@@ -58,9 +69,15 @@ const Home: FC = () => {
           <div className="btn-group ml-auto">
             <button type="button" className="btn btn-secondary" onClick={pageIncrement}>Next</button>
           </div>
+        </div> */}
+
+        <div className="btn-toolbar">
+          <Link href={'/?' + res?.links.next?.split('?')[1]}>
+            <button type="button" className="btn btn-secondary">Next</button>
+          </Link>
         </div>
       </>
-    </Layout>
+    </Layout >
   );
 };
 
