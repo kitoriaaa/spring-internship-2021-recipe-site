@@ -13,13 +13,13 @@ type Props = {
 
 export const Layout: FC<Props> = (props) => {
   return (
-    <div>
+    <div className="bg-light">
       <Head>
         <title>{props.title}</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" crossOrigin="anonymous"></link>
       </Head>
       <Header header={props.header} />
-      <div className="container">
+      <div className="container-fluid">
         <h4 className="my-3 text-primary text-center">
           {props.title}
         </h4>

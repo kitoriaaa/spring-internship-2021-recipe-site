@@ -1,0 +1,8 @@
+#recipe_all {
+    width: 18rem;
+}
+.container-fluid {
+margin-right: auto;
+margin-left: auto;
+max-width: 360px;
+}
