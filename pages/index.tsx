@@ -69,7 +69,7 @@ const Home: FC = () => {
       ))}
       <div className="btn-toolbar">
         {
-          res.links.prev === undefined ? null :
+          res?.links.prev === undefined ? null :
             <div className="btn-group">
               <Link href={res?.links.prev.split('?')[1] == undefined ? "/" : '/?' + res?.links.prev?.split('?')[1]}>
                 <button type="button" className="btn btn-success">Prev</button>
