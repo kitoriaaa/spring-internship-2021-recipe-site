@@ -36,7 +36,7 @@ export type Recipe = {
 };
 
 // GET /recipes response type
-type Response = {
+export type Response = {
   // レシピ一覧
   recipes: Recipe[];
 
@@ -48,25 +48,38 @@ type Response = {
 };
 
 
-export async function getRecipes(page: number): Promise<Recipe[]> {
+export async function getRecipes(page: string): Promise<Response> {
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL as string;
-  const apiUrl = `${apiBaseUrl}?page=${page}`;
+  const apiUrl = `${apiBaseUrl}/recipes?page=${page}`;
   const res = await fetch(apiUrl, {
     headers: { 'X-Api-Key': process.env.NEXT_PUBLIC_API_KEY as string }
   });
   const recipes = await res.json();
   console.log(apiUrl);
   console.log(recipes);
-  return recipes.recipes as Recipe[];
+  // return recipes.recipes as Recipe[];
+  return recipes as Response;
 }
 
 export async function getRecipeById(id: string | string[] | undefined): Promise<Recipe> {
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL as string;
-  const apiUrl = `${apiBaseUrl}?id=${id}`;
+  const apiUrl = `${apiBaseUrl}/recipes?id=${id}`;
   console.log("getRecipeById apiURL: ", apiUrl);
   const res = await fetch(apiUrl, {
     headers: { 'X-Api-Key': process.env.NEXT_PUBLIC_API_KEY as string }
   });
   const recipe = await res.json();
   return recipe.recipes[0];
+}
+
+
+export async function searchRecipes(keyword: string, page: string | null): Promise<Response> {
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL as string;
+  const apiUrl = page !== null ? `${apiBaseUrl}/search?keyword=${keyword}&page=${page}` : `${apiBaseUrl}/search?keyword=${keyword}`;
+  console.log("searchRecipe URL", apiUrl);
+  const res = await fetch(apiUrl, {
+    headers: { 'X-Api-Key': process.env.NEXT_PUBLIC_API_KEY as string }
+  });
+  const recipes = await res.json();
+  return recipes as Response;
 }
