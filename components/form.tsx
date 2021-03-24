@@ -38,7 +38,7 @@ export const Form: FC = () => {
           <input type="text" className="form-control" onChange={onChange} value={text} />
         </div>
         <div className="col-2">
-          <input type="submit" className="btn btn-primary" onClick={onAction} />
+          <input type="submit" className="btn btn-primary" onClick={onAction} value="検索" />
         </div>
       </div>
     </form>
