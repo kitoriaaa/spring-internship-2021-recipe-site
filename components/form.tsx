@@ -1,4 +1,3 @@
-import { route } from "next/dist/next-server/server/router";
 import { useRouter } from "next/router";
 import React, { FC, useEffect, useState } from "react";
 
@@ -34,9 +33,13 @@ export const Form: FC = () => {
 
   return (
     <form onSubmit={onAction}>
-      <div className="form-group">
-        <input type="text" className="form-control" onChange={onChange} value={text} />
-        <input type="submit" className="btn btn-primary" onClick={onAction} />
+      <div className="form-row align-items-center my-3">
+        <div className="col-8">
+          <input type="text" className="form-control" onChange={onChange} value={text} />
+        </div>
+        <div className="col-2">
+          <input type="submit" className="btn btn-primary" onClick={onAction} />
+        </div>
       </div>
     </form>
   );
