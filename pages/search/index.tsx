@@ -39,21 +39,21 @@ export const Search: FC = () => {
   // console.log(res);
   if (page === undefined && router.query.keyword === undefined) {
     return (
-      <Layout header="Recipe" title="レシピを検索">
+      <Layout header="ReciPeer" title="レシピを検索">
       </Layout>
     );
   }
 
   if (loading) {
     return (
-      <Layout header="Recipe" title="レシピを検索">
+      <Layout header="RecPeer" title="レシピを検索">
         <div className="alert alert-warning text-center font-weight">Now Loading...</div>
       </Layout>
     );
   }
   if (res === null || recipes === null) {
     return (
-      <Layout header="Recipe" title="レシピを検索">
+      <Layout header="ReciPeer" title="レシピを検索">
         <div className="alert alert-warning text-center font-weight">Sorry!! Not Found Recipe</div>
       </Layout>
     );

@@ -3,6 +3,7 @@ import Head from "next/head";
 import { Header } from "./header";
 import { Footer } from "./footer";
 import { Form } from "./form";
+import { Navibar } from "./navibar";
 
 type Props = {
   title: string,
@@ -26,6 +27,7 @@ export const Layout: FC<Props> = (props) => {
         <Form />
         {props.children}
         <Footer footer="copyright @kitoriaaa" />
+        <Navibar />
       </div>
     </div>
   );

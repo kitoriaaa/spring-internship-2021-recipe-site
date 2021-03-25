@@ -25,14 +25,14 @@ const FavPage: FC = () => {
   console.log(res);
   if (loading) {
     return (
-      <Layout header="Recipe" title="レシピを検索">
+      <Layout header="ReciPeer" title="お気に入りレシピ">
         <div className="alert alert-warning text-center font-weight">Now Loading...</div>
       </Layout>
     );
   }
   if (res === null || recipes === null) {
     return (
-      <Layout header="Recipe" title="レシピを検索">
+      <Layout header="ReciPeer" title="お気に入りレシピ">
         <div className="alert alert-warning text-center font-weight">お気に入りレシピはまだありません！</div>
       </Layout>
     );
@@ -40,7 +40,7 @@ const FavPage: FC = () => {
 
 
   return (
-    <Layout header="ReciPeer" title="レシピを検索">
+    <Layout header="ReciPeer" title="お気に入りレシピ">
       {recipes.map((recipe) => (
         <div className="card alert alert-warning" key={recipe.id}>
           <Link key={recipe.id} href={`recipes/${recipe.id}`}>

@@ -35,21 +35,21 @@ const Home: FC = () => {
 
   if (loading || recipes === null) {
     return (
-      <Layout header="Recipe" title="レシピを検索">
+      <Layout header="ReciPeer" title="レシピ一覧">
         <div className="alert alert-warning text-center font-weight">Now Loading...</div>
       </Layout>
     );
   }
   if (recipes === null) {
     return (
-      <Layout header="Recipe" title="レシピを検索">
+      <Layout header="ReciPeer" title="レシピ一覧">
         <div className="alert alert-warning text-center font-weight">Sorry!! Not Found Recipe</div>
       </Layout>
     );
   }
 
   return (
-    <Layout header="ReciPeer" title="レシピを検索">
+    <Layout header="ReciPeer" title="レシピ一覧">
       {recipes.map((recipe) => (
         <div className="card alert alert-warning" key={recipe.id}>
           <Link key={recipe.id} href={`recipes/${recipe.id}`}>
