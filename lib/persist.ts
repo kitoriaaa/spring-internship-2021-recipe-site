@@ -1,12 +1,12 @@
 import { useState } from "react";
 
-function usePersist(ky: string, initVal: number[]): [number[], (val: number[]) => void] {
+function usePersist(ky: string, initVal: string[]): [string[], (val: string[]) => void] {
   const key = ky;
   console.log(key);
   const value = () => {
     try {
       const item = window.localStorage.getItem(key);
-      const items: number[] = item ? JSON.parse(item) : initVal;
+      const items: string[] = item ? JSON.parse(item) : initVal;
       return items;
     } catch (err) {
       console.log(err);
@@ -14,7 +14,7 @@ function usePersist(ky: string, initVal: number[]): [number[], (val: number[]) =
     }
   };
 
-  const setValue = (val: number[]) => {
+  const setValue = (val: string[]) => {
     try {
       setSavedValue(val);
       window.localStorage.setItem(key, JSON.stringify(val));
@@ -22,7 +22,7 @@ function usePersist(ky: string, initVal: number[]): [number[], (val: number[]) =
       console.log(err);
     }
   };
-  const [savedValue, setSavedValue] = useState<number[]>(value);
+  const [savedValue, setSavedValue] = useState<string[]>(value);
   return [savedValue, setValue];
 }
 
