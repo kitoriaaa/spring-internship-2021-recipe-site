@@ -7,10 +7,12 @@ export const Form: FC = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (router.query.keyword !== null) {
+    if (router.query.keyword !== undefined) {
       const keyword = router.query.keyword as string;
       if (keyword !== undefined && keyword !== null)
         setText(keyword);
+    } else {
+      setText("");
     }
   }, [router.query.keyword]);
 

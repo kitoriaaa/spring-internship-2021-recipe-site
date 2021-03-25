@@ -39,7 +39,7 @@ const RecipePage: FC = () => {
 
   return (
     <div>
-      <Layout header="Recipe" title="レシピを検索">
+      <Layout header="ReciPeer" title="レシピを検索">
         {recipe && (
           <main>
             <h2>{recipe.title}</h2>

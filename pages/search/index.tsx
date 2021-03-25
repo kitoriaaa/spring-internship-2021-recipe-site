@@ -44,14 +44,14 @@ export const Search: FC = () => {
     );
   }
 
-  if (loading || recipes == null) {
+  if (loading) {
     return (
       <Layout header="Recipe" title="レシピを検索">
         <div className="alert alert-warning text-center font-weight">Now Loading...</div>
       </Layout>
     );
   }
-  if (res === null) {
+  if (res === null || recipes === null) {
     return (
       <Layout header="Recipe" title="レシピを検索">
         <div className="alert alert-warning text-center font-weight">Sorry!! Not Found Recipe</div>
@@ -62,7 +62,7 @@ export const Search: FC = () => {
   console.log("query:", router.query.keyword);
 
   return (
-    <Layout header="Recipe" title="レシピを検索">
+    <Layout header="ReciPeer" title="レシピを検索">
       <>
         {recipes.map((recipe) => (
           <div className="card alert alert-warning" key={recipe.id}>

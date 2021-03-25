@@ -40,7 +40,7 @@ const FavPage: FC = () => {
 
 
   return (
-    <Layout header="Recipe" title="レシピを検索">
+    <Layout header="ReciPeer" title="レシピを検索">
       {recipes.map((recipe) => (
         <div className="card alert alert-warning" key={recipe.id}>
           <Link key={recipe.id} href={`recipes/${recipe.id}`}>

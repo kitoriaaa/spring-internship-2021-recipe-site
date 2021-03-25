@@ -25,7 +25,7 @@ export const Layout: FC<Props> = (props) => {
         </h4>
         <Form />
         {props.children}
-        <Footer footer="copyright kitoriaaa" />
+        <Footer footer="copyright @kitoriaaa" />
       </div>
     </div>
   );
