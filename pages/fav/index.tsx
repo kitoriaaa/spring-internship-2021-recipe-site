@@ -22,17 +22,18 @@ const FavPage: FC = () => {
   }, [getFav]);
 
 
-  if (loading || recipes == null) {
+  console.log(res);
+  if (loading) {
     return (
       <Layout header="Recipe" title="レシピを検索">
         <div className="alert alert-warning text-center font-weight">Now Loading...</div>
       </Layout>
     );
   }
-  if (res === null) {
+  if (res === null || recipes === null) {
     return (
       <Layout header="Recipe" title="レシピを検索">
-        <div className="alert alert-warning text-center font-weight">Sorry!! Not Found Recipe</div>
+        <div className="alert alert-warning text-center font-weight">お気に入りレシピはまだありません！</div>
       </Layout>
     );
   }
