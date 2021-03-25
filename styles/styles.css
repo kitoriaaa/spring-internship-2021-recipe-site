@@ -6,3 +6,16 @@ margin-right: auto;
 margin-left: auto;
 max-width: 360px;
 }
+
+#active {
+  color: #fff;
+  background-color: #198754;
+  border-color: #198754;
+  border-radius: 10px;
+}
+#deactive {
+  color: #198754;
+  border-color: #198754;
+  border-radius: 10px;
+  color: black;
+}
