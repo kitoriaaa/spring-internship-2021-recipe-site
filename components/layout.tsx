@@ -13,7 +13,7 @@ type Props = {
 
 export const Layout: FC<Props> = (props) => {
   return (
-    <div className="bg-light">
+    <div className="bg-light" id="wrapper">
       <Head>
         <title>{props.title}</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" crossOrigin="anonymous"></link>
@@ -25,8 +25,8 @@ export const Layout: FC<Props> = (props) => {
         </h4>
         <Form />
         {props.children}
+        <Footer footer="copyright kitoriaaa" />
       </div>
-      <Footer footer="copyright kitoriaaa" />
     </div>
   );
 };

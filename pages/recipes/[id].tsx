@@ -14,8 +14,8 @@ const RecipePage: FC = () => {
   useEffect(() => {
     (async () => {
       if (router.query.id !== undefined) {
-        const recipe = await getRecipeById(router.query.id);
-        setRecipe(recipe);
+        const res = await getRecipeById(router.query.id);
+        if (res !== null) setRecipe(res.recipes[0]);
       }
     })();
   }, [router.query.id]);
@@ -24,7 +24,7 @@ const RecipePage: FC = () => {
     setIsFav(!isFav);
 
     let favArr = getFav;
-    const targetId = Number(router.query.id);
+    const targetId = String(router.query.id);
     if (favArr.length === 0) {
       setFav([targetId]);
     } else {
@@ -51,7 +51,7 @@ const RecipePage: FC = () => {
               <p className="col-6">{recipe.author.user_name}</p>
               <p className="col-6">{recipe.published_at}</p>
             </div>
-            <button id={getFav.includes(Number(router.query.id)) ? "active" : "deactive"} onClick={Fav}>お気に入り</button>
+            <button id={getFav.includes(String(router.query.id)) ? "active" : "deactive"} onClick={Fav}>お気に入り</button>
             <p>{recipe.description}</p>
 
 

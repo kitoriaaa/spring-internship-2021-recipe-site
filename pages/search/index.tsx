@@ -36,7 +36,14 @@ export const Search: FC = () => {
   }, [router.query.page, router.query.keyword]);
 
 
-  console.log(loading);
+  // console.log(res);
+  if (page === undefined && router.query.keyword === undefined) {
+    return (
+      <Layout header="Recipe" title="レシピを検索">
+      </Layout>
+    );
+  }
+
   if (loading || recipes == null) {
     return (
       <Layout header="Recipe" title="レシピを検索">

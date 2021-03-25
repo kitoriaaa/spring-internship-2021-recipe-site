@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 const Home: FC = () => {
   const router = useRouter();
   const [recipes, setRecipes] = useState<Recipe[] | null>(null);
-  const [page, setPage] = useState<string | undefined>(undefined);
+  const [, setPage] = useState<string | undefined>(undefined);
   const [res, setRes] = useState<Response | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -50,7 +50,7 @@ const Home: FC = () => {
 
   return (
     <Layout header="Recipe" title="レシピを検索">
-      {recipes.map((recipe, ind) => (
+      {recipes.map((recipe) => (
         <div className="card alert alert-warning" key={recipe.id}>
           <Link key={recipe.id} href={`recipes/${recipe.id}`}>
             <div role="button">
