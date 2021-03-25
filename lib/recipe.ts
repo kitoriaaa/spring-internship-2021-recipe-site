@@ -79,6 +79,7 @@ export async function getRecipeById(id: string | string[] | undefined): Promise<
   const res = await fetch(apiUrl, {
     headers: { 'X-Api-Key': process.env.NEXT_PUBLIC_API_KEY as string }
   });
+  if (res.status === 404) return null;
   const recipes = await res.json();
   return recipes as Response;
 }
