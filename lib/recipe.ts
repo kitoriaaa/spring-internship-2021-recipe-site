@@ -61,17 +61,27 @@ export async function getRecipes(page: string): Promise<Response> {
   return recipes as Response;
 }
 
-export async function getRecipeById(id: string | string[] | undefined): Promise<Recipe> {
+// export async function getRecipeById(id: string | string[] | undefined): Promise<Recipe> {
+//   const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL as string;
+//   const apiUrl = `${apiBaseUrl}/recipes?id=${id}`;
+//   console.log("getRecipeById apiURL: ", apiUrl);
+//   const res = await fetch(apiUrl, {
+//     headers: { 'X-Api-Key': process.env.NEXT_PUBLIC_API_KEY as string }
+//   });
+//   const recipe = await res.json();
+//   return recipe.recipes[0];
+// }
+
+export async function getRecipeById(id: string | string[] | undefined): Promise<Response | null> {
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL as string;
   const apiUrl = `${apiBaseUrl}/recipes?id=${id}`;
   console.log("getRecipeById apiURL: ", apiUrl);
   const res = await fetch(apiUrl, {
     headers: { 'X-Api-Key': process.env.NEXT_PUBLIC_API_KEY as string }
   });
-  const recipe = await res.json();
-  return recipe.recipes[0];
+  const recipes = await res.json();
+  return recipes as Response;
 }
-
 
 export async function searchRecipes(keyword: string, page: string | null): Promise<Response | null> {
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL as string;
