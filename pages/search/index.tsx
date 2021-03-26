@@ -3,14 +3,17 @@ import { useRouter } from "next/router";
 import { Recipe, searchRecipes, Response } from "../../lib/recipe";
 import { Layout } from "../../components/layout";
 import Link from 'next/link';
+import { ListImageDescription } from "../../components/listImageDescription";
 
 export const Search: FC = () => {
   const router = useRouter();
   const [res, setRes] = useState<Response | null>(null);
   const [recipes, setRecipes] = useState<Recipe[] | null>(null);
   const [page, setPage] = useState<string | undefined>(undefined);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    setLoading(true);
     (async () => {
       const page = router.query.page;
       const word = router.query.keyword;
@@ -30,57 +33,73 @@ export const Search: FC = () => {
           setRecipes(res.recipes);
       }
     })();
+    setLoading(false);
   }, [router.query.page, router.query.keyword]);
 
-  if (res === null) {
+
+  // console.log(res);
+  if (page === undefined && router.query.keyword === undefined) {
     return (
-      <Layout header="Recipe" title="レシピを検索">
+      <Layout header="ReciPeer" title="レシピを検索">
+      </Layout>
+    );
+  }
+
+  if (loading) {
+    return (
+      <Layout header="RecPeer" title="レシピを検索">
+        <div className="alert alert-warning text-center font-weight">Now Loading...</div>
+      </Layout>
+    );
+  }
+  if (res === null || recipes === null) {
+    return (
+      <Layout header="ReciPeer" title="レシピを検索">
         <div className="alert alert-warning text-center font-weight">Sorry!! Not Found Recipe</div>
       </Layout>
     );
   }
-  if (recipes === null) return <div>loading...</div>;
 
   console.log("query:", router.query.keyword);
 
   return (
-    <Layout header="Recipe" title="レシピを検索">
+    <Layout header="ReciPeer" title="レシピを検索">
       <>
         {recipes.map((recipe) => (
-          <div className="card alert alert-primary" key={recipe.id}>
+          <div className="card alert alert-warning" key={recipe.id}>
             <Link key={recipe.id} href={`recipes/${recipe.id}`}>
               <div>
                 <div className="text-center font-weight-bold">
                   {recipe.title}
                 </div>
-                <div className="row">
-                  <div className="col">
-                    {recipe.image_url !== null ? <img className="my-2" src={recipe.image_url} width="185" /> : <div className="my-2">No Image</div>}
+                {/* <div className="card" id="recipe_all">
+                  {recipe.image_url !== null ? <img className="bd-placeholder-img card-img-top" width="100%" height="180" src={recipe.image_url} /> : null}
+                  <div className="card-body">
+                    <p className="card-text">{recipe.description}</p>
                   </div>
-                  <div className="col d-flex align-items-center text-left" >
-                    <div className="p-2">
-                      {recipe.description}
-                    </div>
-                  </div>
-                </div>
+                </div> */}
+                <ListImageDescription image_url={recipe.image_url} description={recipe.description} />
               </div>
             </Link>
           </div>
         ))}
         <div className="btn-toolbar">
           {
-            page === undefined ? null :
+            res?.links.prev === undefined ? null :
               <div className="btn-group">
-                <Link href={'/search?' + res?.links.prev?.split('?')[1]}>
+                <Link href={res?.links.prev.split('?')[1] == undefined ? "/search" : '/search?' + res?.links.prev?.split('?')[1]}>
                   <button type="button" className="btn btn-success">Prev</button>
                 </Link>
               </div>
           }
-          <div className="btn-group ml-auto">
-            <Link href={'/search?' + res?.links.next?.split('?')[1]}>
-              <button type="button" className="btn btn-success">Next</button>
-            </Link>
-          </div>
+          {
+            res?.links.next === undefined ? null :
+              <div className="btn-group ml-auto">
+                <Link href={'/search?' + res?.links.next?.split('?')[1]}>
+                  <button type="button" className="btn btn-success">Next</button>
+                </Link>
+              </div>
+          }
         </div>
       </>
     </Layout>

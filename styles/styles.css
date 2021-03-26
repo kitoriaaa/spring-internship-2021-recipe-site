@@ -1,0 +1,48 @@
+#recipe_all {
+    max-width: 18rem;
+}
+.container-fluid {
+margin-right: auto;
+margin-left: auto;
+max-width: 360px;
+}
+
+#active {
+  color: #fff;
+  background-color: #198754;
+  border-color: #198754;
+  border-radius: 10px;
+}
+#deactive {
+  color: #198754;
+  border-color: #198754;
+  border-radius: 10px;
+  color: black;
+}
+
+#wrapper{
+  /* min-height: 100vh; */
+  position: relative;
+  padding-bottom: 140px;
+  box-sizing: border-box;
+}
+
+#footer{
+  width: 92%;
+  background-color: #89c7de;
+  color: #fff;
+  text-align: center;
+  padding: 20px 0;
+
+  position: fixed;
+  bottom: -23px;
+  margin:0px;
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 330px;
+}
+
+* { 
+    margin: 0px; 
+    padding: 0px; 
+}

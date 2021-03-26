@@ -3,14 +3,17 @@ import { Layout } from "../components/layout";
 import { Recipe, getRecipes, Response } from "../lib/recipe";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { ListImageDescription } from "../components/listImageDescription";
 
 const Home: FC = () => {
   const router = useRouter();
   const [recipes, setRecipes] = useState<Recipe[] | null>(null);
-  const [page, setPage] = useState<string | undefined>(undefined);
+  const [, setPage] = useState<string | undefined>(undefined);
   const [res, setRes] = useState<Response | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    setLoading(true);
     (async () => {
       const page = router.query.page;
       setPage(page as string);
@@ -23,65 +26,61 @@ const Home: FC = () => {
       setRes(res);
       if (res !== null)
         setRecipes(res.recipes);
+      setLoading(false);
     })();
   }, [router.query.page]);
 
+  console.log("link prev", res?.links.prev);
 
-  // console.log(recipes);
-  if (recipes === null) return <div>loading...</div>;
+  console.log("link", res?.links.next);
+
+  if (loading || recipes === null) {
+    return (
+      <Layout header="ReciPeer" title="レシピ一覧">
+        <div className="alert alert-warning text-center font-weight">Now Loading...</div>
+      </Layout>
+    );
+  }
+  if (recipes === null) {
+    return (
+      <Layout header="ReciPeer" title="レシピ一覧">
+        <div className="alert alert-warning text-center font-weight">Sorry!! Not Found Recipe</div>
+      </Layout>
+    );
+  }
 
   return (
-    <Layout header="Recipe" title="レシピを検索">
-      <>
-        {recipes.map((recipe) => (
-          <div className="card alert alert-primary" key={recipe.id}>
-            <Link key={recipe.id} href={`recipes/${recipe.id}`}>
-              <div>
-                <div className="text-center font-weight-bold">
-                  {recipe.title}
-                </div>
-                <div className="row">
-                  <div className="col">
-                    {recipe.image_url !== null ? <img className="my-2" src={recipe.image_url} width="185" /> : <div className="my-2">No Image</div>}
-                  </div>
-                  <div className="col d-flex align-items-center text-left" >
-                    <div className="p-2">
-                      {recipe.description}
-                    </div>
-                  </div>
-                </div>
+    <Layout header="ReciPeer" title="レシピ一覧">
+      {recipes.map((recipe) => (
+        <div className="card alert alert-warning" key={recipe.id}>
+          <Link key={recipe.id} href={`recipes/${recipe.id}`}>
+            <div role="button">
+              <div className="text-center font-weight-bold">
+                {recipe.title}
               </div>
-            </Link>
-          </div>
-        ))}
-        {/* <div className="btn-toolbar">
-          {
-            page === 1 ? null :
-              <div className="btn-group">
-                <button type="button" className="btn btn-secondary" onClick={pageDecrement}>Prev</button>
-              </div>
-          }
-          <div className="btn-group ml-auto">
-            <button type="button" className="btn btn-secondary" onClick={pageIncrement}>Next</button>
-          </div>
-        </div> */}
-
-        <div className="btn-toolbar">
-          {
-            page === undefined ? null :
-              <div className="btn-group">
-                <Link href={'/?' + res?.links.prev?.split('?')[1]}>
-                  <button type="button" className="btn btn-success">Prev</button>
-                </Link>
-              </div>
-          }
-          <div className="btn-group ml-auto">
-            <Link href={'/?' + res?.links.next?.split('?')[1]}>
-              <button type="button" className="btn btn-success">Next</button>
-            </Link>
-          </div>
+              <ListImageDescription image_url={recipe.image_url} description={recipe.description} />
+            </div>
+          </Link>
         </div>
-      </>
+      ))}
+      <div className="btn-toolbar">
+        {
+          res?.links.prev === undefined ? null :
+            <div className="btn-group">
+              <Link href={res?.links.prev.split('?')[1] == undefined ? "/" : '/?' + res?.links.prev?.split('?')[1]}>
+                <button type="button" className="btn btn-success">Prev</button>
+              </Link>
+            </div>
+        }
+        {
+          res?.links.next === undefined ? null :
+            <div className="btn-group ml-auto">
+              <Link href={'/?' + res?.links.next?.split('?')[1]}>
+                <button type="button" className="btn btn-success">Next</button>
+              </Link>
+            </div>
+        }
+      </div>
     </Layout >
   );
 };
