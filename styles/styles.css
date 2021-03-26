@@ -1,5 +1,5 @@
 #recipe_all {
-    width: 18rem;
+    max-width: 18rem;
 }
 .container-fluid {
 margin-right: auto;
