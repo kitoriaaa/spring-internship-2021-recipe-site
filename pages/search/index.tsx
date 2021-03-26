@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { Recipe, searchRecipes, Response } from "../../lib/recipe";
 import { Layout } from "../../components/layout";
 import Link from 'next/link';
+import { ListImageDescription } from "../../components/listImageDescription";
 
 export const Search: FC = () => {
   const router = useRouter();
@@ -71,12 +72,13 @@ export const Search: FC = () => {
                 <div className="text-center font-weight-bold">
                   {recipe.title}
                 </div>
-                <div className="card" id="recipe_all">
+                {/* <div className="card" id="recipe_all">
                   {recipe.image_url !== null ? <img className="bd-placeholder-img card-img-top" width="100%" height="180" src={recipe.image_url} /> : null}
                   <div className="card-body">
                     <p className="card-text">{recipe.description}</p>
                   </div>
-                </div>
+                </div> */}
+                <ListImageDescription image_url={recipe.image_url} description={recipe.description} />
               </div>
             </Link>
           </div>
