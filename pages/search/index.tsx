@@ -4,54 +4,50 @@ import { Recipe, searchRecipes, Response } from "../../lib/recipe";
 import { Layout } from "../../components/layout";
 import Link from 'next/link';
 import { ListImageDescription } from "../../components/listImageDescription";
+import { GetServerSideProps } from "next";
 
-export const Search: FC = () => {
-  const router = useRouter();
-  const [res, setRes] = useState<Response | null>(null);
-  const [recipes, setRecipes] = useState<Recipe[] | null>(null);
-  const [page, setPage] = useState<string | undefined>(undefined);
-  const [loading, setLoading] = useState<boolean>(true);
+type Props = {
+  recipes: Recipe[] | null;
+  res: Response | null;
+  word: string;
+}
 
-  useEffect(() => {
-    setLoading(true);
-    (async () => {
-      const page = router.query.page;
-      const word = router.query.keyword;
-      setPage(page as string);
-      let res;
-      console.log("page: ", page);
+export const Search: FC<Props> = (props) => {
+  const { recipes, res, word } = props;
 
-      if (router.query.keyword !== undefined) {
-        if (page !== undefined) {
-          console.log("page isn't undefined");
-          res = await searchRecipes(word as string, page as string);
-        } else {
-          res = await searchRecipes(word as string, null);
-        }
-        setRes(res);
-        if (res !== null)
-          setRecipes(res.recipes);
-      }
-    })();
-    setLoading(false);
-  }, [router.query.page, router.query.keyword]);
+  // useEffect(() => {
+  //   setLoading(true);
+  //   (async () => {
+  //     const page = router.query.page;
+  //     const word = router.query.keyword;
+  //     setPage(page as string);
+  //     let res;
+  //     console.log("page: ", page);
+
+  //     if (router.query.keyword !== undefined) {
+  //       if (page !== undefined) {
+  //         console.log("page isn't undefined");
+  //         res = await searchRecipes(word as string, page as string);
+  //       } else {
+  //         res = await searchRecipes(word as string, null);
+  //       }
+  //       setRes(res);
+  //       if (res !== null)
+  //         setRecipes(res.recipes);
+  //     }
+  //   })();
+  //   setLoading(false);
+  // }, [router.query.page, router.query.keyword]);
 
 
   // console.log(res);
-  if (page === undefined && router.query.keyword === undefined) {
+  if (word === undefined) {
     return (
       <Layout header="ReciPeer" title="レシピを検索">
       </Layout>
     );
   }
 
-  if (loading) {
-    return (
-      <Layout header="RecPeer" title="レシピを検索">
-        <div className="alert alert-warning text-center font-weight">Now Loading...</div>
-      </Layout>
-    );
-  }
   if (res === null || recipes === null) {
     return (
       <Layout header="ReciPeer" title="レシピを検索">
@@ -60,7 +56,6 @@ export const Search: FC = () => {
     );
   }
 
-  console.log("query:", router.query.keyword);
 
   return (
     <Layout header="ReciPeer" title="レシピを検索">
@@ -72,12 +67,6 @@ export const Search: FC = () => {
                 <div className="text-center font-weight-bold">
                   {recipe.title}
                 </div>
-                {/* <div className="card" id="recipe_all">
-                  {recipe.image_url !== null ? <img className="bd-placeholder-img card-img-top" width="100%" height="180" src={recipe.image_url} /> : null}
-                  <div className="card-body">
-                    <p className="card-text">{recipe.description}</p>
-                  </div>
-                </div> */}
                 <ListImageDescription image_url={recipe.image_url} description={recipe.description} />
               </div>
             </Link>
@@ -104,6 +93,39 @@ export const Search: FC = () => {
       </>
     </Layout>
   );
+};
+
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const page = context.query.page;
+  const word = context.query.keyword;
+  console.log(word);
+
+  let res;
+  if (word !== undefined) {
+    if (page !== undefined) {
+      console.log("page isn't undefined");
+      res = await searchRecipes(word as string, page as string);
+    } else {
+      res = await searchRecipes(word as string, null);
+    }
+  } else {
+    res = null;
+  }
+
+  let recipes: Recipe[] | null;
+  if (res !== null)
+    recipes = res.recipes;
+  else
+    recipes = null;
+
+  return {
+    props: {
+      recipes: recipes,
+      res: res,
+      keyword: word
+    }
+  };
 };
 
 export default Search;
