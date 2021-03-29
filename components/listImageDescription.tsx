@@ -9,7 +9,9 @@ type Props = {
 export const ListImageDescription: FC<Props> = (props) => {
   return (
     <div className="card" id="props_all">
-      {props.image_url !== null ? <img className="bd-placeholder-img card-img-top" width="100%" src={props.image_url} alt="Racipe image" /> :
+      {props.image_url !== null ?
+        <Image src={props.image_url} alt="Recipe image" width="284" height="160" />
+        :
         <Image src="/no-image.jpg" alt="No image"
           width="260" height="160"
         />}
