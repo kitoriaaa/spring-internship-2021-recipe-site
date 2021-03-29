@@ -1,30 +1,25 @@
-import React, { FC, useState, useEffect } from "react";
-import { useRouter } from 'next/router';
+import React, { FC, useState } from "react";
 import { Recipe, getRecipeById } from "../../lib/recipe";
 import { Layout } from "../../components/layout";
 import usePersist from "../../lib/persist";
+import { GetServerSideProps } from "next";
+import Image from 'next/image';
 
+type Props = {
+  recipe: Recipe | undefined;
+  id: number | undefined;
+}
 
-const RecipePage: FC = () => {
-  const router = useRouter();
+const RecipePage: FC<Props> = (props) => {
   const [getFav, setFav] = usePersist("fav", []);
-  const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [isFav, setIsFav] = useState<boolean>(false);
-
-  useEffect(() => {
-    (async () => {
-      if (router.query.id !== undefined) {
-        const res = await getRecipeById(router.query.id);
-        if (res !== null) setRecipe(res.recipes[0]);
-      }
-    })();
-  }, [router.query.id]);
+  const { recipe, id } = props;
 
   const Fav = () => {
     setIsFav(!isFav);
 
     let favArr = getFav;
-    const targetId = String(router.query.id);
+    const targetId = String(id);
     if (favArr.length === 0) {
       setFav([targetId]);
     } else {
@@ -37,21 +32,32 @@ const RecipePage: FC = () => {
     }
   };
 
+  if (recipe === undefined) {
+    return (
+      <div>
+        <Layout header="Recipeer" title="詳細レシピ">
+          <div className="alert alert-warning text-center font-weight">Sorry!! Not found Recipe</div>
+        </Layout>
+      </div>
+    );
+  }
+
   return (
     <div>
-      <Layout header="ReciPeer" title="レシピを検索">
+      <Layout header="ReciPeer" title="詳細レシピ">
         {recipe && (
           <main>
             <h2>{recipe.title}</h2>
-            {recipe.image_url && (
-              <img src={recipe.image_url} alt="レシピ画像" width="300" />
-            )}
+            {recipe.image_url !== null ?
+              <Image src={recipe.image_url} alt="recipe"
+                width="300" height="160" />
+              : <Image src="/no-image.jpg" alt="No image" width="300" height="160" />}
 
             <div className="row">
               <p className="col-6">{recipe.author.user_name}</p>
               <p className="col-6">{recipe.published_at}</p>
             </div>
-            <button id={getFav.includes(String(router.query.id)) ? "active" : "deactive"} onClick={Fav}>お気に入り</button>
+            <button id={getFav.includes(String(id)) ? "active" : "deactive"} onClick={Fav}>お気に入り</button>
             <p>{recipe.description}</p>
 
 
@@ -82,6 +88,27 @@ const RecipePage: FC = () => {
       </Layout>
     </div>
   );
+};
+
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const id = context.query?.id;
+  let res;
+
+  if (id === undefined) {
+    res = null;
+  } else {
+    res = await getRecipeById(id);
+  }
+
+  const recipe = res?.recipes[0];
+
+  return {
+    props: {
+      recipe: recipe,
+      id: id
+    }
+  };
 };
 
 export default RecipePage;
