@@ -1,5 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import React, { FC } from "react";
 import { Recipe, searchRecipes, Response } from "../../lib/recipe";
 import { Layout } from "../../components/layout";
 import Link from 'next/link';
@@ -9,39 +8,14 @@ import { GetServerSideProps } from "next";
 type Props = {
   recipes: Recipe[] | null;
   res: Response | null;
-  word: string;
+  keyword: string;
 }
 
-export const Search: FC<Props> = (props) => {
-  const { recipes, res, word } = props;
-
-  // useEffect(() => {
-  //   setLoading(true);
-  //   (async () => {
-  //     const page = router.query.page;
-  //     const word = router.query.keyword;
-  //     setPage(page as string);
-  //     let res;
-  //     console.log("page: ", page);
-
-  //     if (router.query.keyword !== undefined) {
-  //       if (page !== undefined) {
-  //         console.log("page isn't undefined");
-  //         res = await searchRecipes(word as string, page as string);
-  //       } else {
-  //         res = await searchRecipes(word as string, null);
-  //       }
-  //       setRes(res);
-  //       if (res !== null)
-  //         setRecipes(res.recipes);
-  //     }
-  //   })();
-  //   setLoading(false);
-  // }, [router.query.page, router.query.keyword]);
-
+const Search: FC<Props> = (props) => {
+  const { recipes, res, keyword } = props;
 
   // console.log(res);
-  if (word === undefined) {
+  if (keyword === undefined) {
     return (
       <Layout header="ReciPeer" title="レシピを検索">
       </Layout>
@@ -97,17 +71,17 @@ export const Search: FC<Props> = (props) => {
 
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const page = context.query.page;
-  const word = context.query.keyword;
+  const page = context.query?.page;
+  const word = context.query?.keyword as string;
   console.log(word);
 
   let res;
   if (word !== undefined) {
     if (page !== undefined) {
       console.log("page isn't undefined");
-      res = await searchRecipes(word as string, page as string);
+      res = await searchRecipes(encodeURIComponent(word), page as string);
     } else {
-      res = await searchRecipes(word as string, null);
+      res = await searchRecipes(encodeURIComponent(word), null);
     }
   } else {
     res = null;
