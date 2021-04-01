@@ -44,7 +44,7 @@ const RecipePage: FC<Props> = (props) => {
 
   return (
     <div>
-      <Layout header="ReciPeer" title="詳細レシピ">
+      <Layout header="ReciPeer" title="詳細レシピ" image={recipe.image_url}>
         {recipe && (
           <main>
             <h2>{recipe.title}</h2>
